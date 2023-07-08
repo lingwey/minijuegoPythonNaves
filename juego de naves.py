@@ -28,12 +28,34 @@ background = pygame.image.load(fondo)
 iconoVentana = recursosPath('imagenes/ufo.png')
 icono = pygame.image.load(iconoVentana)
 
-#reproduce sonido de fondo en bucle
+#cargar sonido de fondo
 sonido = recursosPath('audio/background_music.mp3')
 sonidoFondo = pygame.mixer.music.load(sonido)
 
 #jugador imagen
-jugador = recursosPath('imagenes/s')
+jugadorImagen = recursosPath('imagenes/space-invaders.png')
+jugador = pygame.image.load(jugadorImagen)
+
+#cargar bala
+balaImagen = recursosPath('imagenes/bullet.png')
+bala = pygame.image.load(balaImagen)
+
+#cargar fuente para texto de fin del juego
+gameOverPantalla = recursosPath('fondos/RAVIE.TTF')
+gameOver = pygame.font.Font(gameOverPantalla)
+
+#cargar fuente para exto de puntaje
+fuenteTexto = recursosPath('fondos/comicdb.ttf')
+texto = pygame.font.Font(fuenteTexto)
+
+#establece el titulo de la ventana
+pygame.display.set_caption('invasores espaciales')
+
+#establece ventana
+pygame.display.set_icon(icono)
+
+#musica de fondo en bucle
+pygame.mixer.music.play(-1)
 
 #reloj para control de velocidad
 reloj = pygame.time.Clock()
@@ -44,7 +66,7 @@ posicionJugadorY = 470
 jugadorCambioEjeX = 0
 jugadorCambioEjeY = 0
 
-#lista de enemigos
+#lista de posiciones de los enemigos
 navesEnemigas = []
 enemigoX = []
 enemigoY = []
@@ -73,12 +95,77 @@ for i in range(numEnemigos):
     balaY = 480
     balaCambioEjeX = 0
     balaCambioEjeY = 10
-    balaEstado = "ready"
+    balaEstado = "lista"
     
     #inicia la puntuacion
     puntaje = 0
     
     #funcion para mostrar la puntuacion
     def mostrarPuntaje():
-        puntajeValor = font.render("puntaje " + str(puntaje),True,(255,255,255))
-        screen.blit(puntajeValor,(10,10))    
+        puntajeValor = texto.render("puntaje " + str(puntaje),True,(255,255,255))
+        screen.blit(puntajeValor,(10,10))
+        
+    #funcion para dibujar al jugador en la pantalla
+    def player (x, y, i):
+        screen.blit(jugadorImagen,(x,y))
+    
+    #funcion para dibujar naves enemigas en la pantalla
+    def enemigos (x, y ,i):
+        screen.blit(navesEnemigas[i],(x,y))      
+
+    #funcion de disparo de bala
+    def dispararBala(x, y):
+        global balaEstado
+        balaEstado = "lista"
+        screen.blit(balaImagen,(x + 16 , y + 10))
+    
+    #funcion para comprobar colision de bala contra enemigos
+    def ifColision (enemigoX, enemigoY, balaX, balaY):
+        distancia = math.sqrt(math.pow(enemigoX - balaX,2)
+                              (math.pow(enemigoY - balaY, 2)))
+        if distancia < 27:
+            return True
+        else:
+            return False
+    
+    #funcion para mostrar texto de game over
+    def gameOverTexto ():
+        overTexto = texto.render("Game Over", True, (255,255,255))
+        textoRect = texto.get_rect(
+            center = (int(screen_width / 2), int(screen_height / 2)))
+        screen.blit(overTexto, textoRect)
+        
+    #funcion principal del juego
+    def gameloop():
+        #declara variables globales
+        global puntaje
+        global posicionJugadorX
+        global jugadorCambioEjeX
+        global balaX
+        global balaY
+        global colision
+        global balaEstado
+        
+        inGame = True
+        while inGame:
+            #maneja los eventos, actualiza,limpia la pantalla y renderiza el juego
+            screen.fill(0, 0, 0)
+            screen.blit(background, (0, 0))
+            
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    inGame = False
+                    pygame.quit()
+                    sys.exit()
+            
+                #maneja los movimientos del jugador
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT:
+                        jugadorCambioEjeX = -5
+                    
+                    if event.key == pygame.K_RIGHT:
+                        jugadorCambioEjeX = 5
+                    
+                    if event.key == pygame.K_SPACE:
+                        if balaEstado == "lista" :
+                                               
