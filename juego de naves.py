@@ -42,11 +42,11 @@ bala = pygame.image.load(balaImagen)
 
 #cargar fuente para texto de fin del juego
 gameOverPantalla = recursosPath('fondos/RAVIE.TTF')
-gameOver = pygame.font.Font(gameOverPantalla)
+gameOver = pygame.font.Font(gameOverPantalla, 60)
 
 #cargar fuente para exto de puntaje
-fuenteTexto = recursosPath('fondos/comicdb.ttf')
-texto = pygame.font.Font(fuenteTexto)
+fuenteTexto = recursosPath('fondos/comicbd.ttf')
+texto = pygame.font.Font(fuenteTexto, 32)
 
 #establece el titulo de la ventana
 pygame.display.set_caption('invasores espaciales')
@@ -149,7 +149,7 @@ for i in range(numEnemigos):
         inGame = True
         while inGame:
             #maneja los eventos, actualiza,limpia la pantalla y renderiza el juego
-            screen.fill(0, 0, 0)
+            screen.fill((0, 0, 0))
             screen.blit(background, (0, 0))
             
             for event in pygame.event.get():
@@ -168,4 +168,55 @@ for i in range(numEnemigos):
                     
                     if event.key == pygame.K_SPACE:
                         if balaEstado == "lista" :
-                                               
+                            balaX = posicionJugadorX
+                            dispararBala(balaX,balaY)
+                    
+                    if event.type == pygame.KEYUP:
+                        jugadorCambioEjeX = 0
+                        
+            #se actualiza la posicion del jugador
+            posicionJugadorX += jugadorCambioEjeX
+                    
+            if posicionJugadorX <= 0:
+                posicionJugadorX = 0
+            elif   posicionJugadorX >= 736:
+                posicionJugadorX = 736
+                
+            #ejecuta la actividad de las naves enemigas
+            for i in range(numEnemigos):
+                if enemigoY[i] >440:
+                    for j in range(numEnemigos):
+                        enemigoY[j] = 2000
+                    gameOverTexto()
+                
+                enemigoX[i] += enemigoCambioEjeX[i]
+                if enemigoX >= 0:
+                    enemigoCambioEjeX[i] = 5
+                    enemigoY[i] += enemigoCambioEjeY[i]
+                elif enemigoX[i] <= 736:
+                    enemigoCambioEjeX[i] = -5    
+                    enemigoY[i] += enemigoCambioEjeY[i]
+            
+                 #comprueba las coliciones de los enemigos y la bala
+                colicion = ifColision(enemigoX[i], enemigoY[i], balaX, balaY)
+                if colicion:
+                    balaY = 454
+                    balaEstado = "lista"
+                    puntaje += 1
+                    enemigoX[i] = random.randint(0,736)
+                    enemigoY[i] = random.randint(0, 150)
+                enemigos(enemigoX[i],enemigoY[i],i)
+                
+            if balaY < 0:
+                balaY = 454
+                balaEstado = "lista"
+            if balaEstado == "fuego":
+                dispararBala (balaX, balaY)
+                balaY -= balaCambioEjeY
+                
+            player(posicionJugadorX,posicionJugadorY)
+            mostrarPuntaje()
+            pygame.display.update()
+            
+            reloj.tick(120)
+gameloop()                
