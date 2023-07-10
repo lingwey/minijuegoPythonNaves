@@ -106,7 +106,7 @@ for i in range(numEnemigos):
         screen.blit(puntajeValor,(10,10))
         
     #funcion para dibujar al jugador en la pantalla
-    def player (x, y, i):
+    def player (x, y):
         screen.blit(jugadorImagen,(x,y))
     
     #funcion para dibujar naves enemigas en la pantalla
@@ -121,7 +121,7 @@ for i in range(numEnemigos):
     
     #funcion para comprobar colision de bala contra enemigos
     def ifColision (enemigoX, enemigoY, balaX, balaY):
-        distancia = math.sqrt(math.pow(enemigoX - balaX,2)
+        distancia = math.sqrt(math.pow(enemigoX - balaX,2) +
                               (math.pow(enemigoY - balaY, 2)))
         if distancia < 27:
             return True
@@ -190,10 +190,10 @@ for i in range(numEnemigos):
                     gameOverTexto()
                 
                 enemigoX[i] += enemigoCambioEjeX[i]
-                if enemigoX >= 0:
+                if enemigoX[i] <= 0:
                     enemigoCambioEjeX[i] = 5
                     enemigoY[i] += enemigoCambioEjeY[i]
-                elif enemigoX[i] <= 736:
+                elif enemigoX[i] >= 736:
                     enemigoCambioEjeX[i] = -5    
                     enemigoY[i] += enemigoCambioEjeY[i]
             
