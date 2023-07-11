@@ -8,8 +8,8 @@ import os
 pygame.init()
 
 #tamaño de pantalla
-screen_width = 1200
-screen_height = 800
+screen_width = 900
+screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 #rutas de recursos
@@ -21,31 +21,32 @@ def recursosPath(relative_path):
         return os.path.join(base_path, relative_path)
 
 #cargar imagenes de fondo
-fondo = recursosPath('imagenes/background.png')
+fondo = recursosPath('recursos/imagenes/background.png')
 background = pygame.image.load(fondo)
 
 #icono ventana
-iconoVentana = recursosPath('imagenes/ufo.png')
+iconoVentana = recursosPath('recursos/imagenes/ufo.png')
 icono = pygame.image.load(iconoVentana)
 
 #cargar sonido de fondo
-sonido = recursosPath('audio/background_music.mp3')
+sonido = recursosPath('recursos/audio/background_music.mp3')
 sonidoFondo = pygame.mixer.music.load(sonido)
 
 #jugador imagen
-jugadorImagen = recursosPath('imagenes/space-invaders.png')
+jugadorImagen = recursosPath("recursos/imagenes/space-invaders.png")
 jugador = pygame.image.load(jugadorImagen)
 
+
 #cargar bala
-balaImagen = recursosPath('imagenes/bullet.png')
+balaImagen = recursosPath('recursos/imagenes/bullet.png')
 bala = pygame.image.load(balaImagen)
 
 #cargar fuente para texto de fin del juego
-gameOverPantalla = recursosPath('fondos/RAVIE.TTF')
+gameOverPantalla = recursosPath('recursos/fondos/RAVIE.TTF')
 gameOver = pygame.font.Font(gameOverPantalla, 60)
 
 #cargar fuente para exto de puntaje
-fuenteTexto = recursosPath('fondos/comicbd.ttf')
+fuenteTexto = recursosPath('recursos/fondos/comicbd.ttf')
 texto = pygame.font.Font(fuenteTexto, 32)
 
 #establece el titulo de la ventana
@@ -77,9 +78,9 @@ numEnemigos = 10
 #inicia las variables para guardar las posiciones de los enemigos
 for i in range(numEnemigos):
     #carga las imagenes de las naves enemigas
-    enemigo1 = recursosPath('imagenes/enemy1.png')
+    enemigo1 = recursosPath('recursos/imagenes/enemy1.png')
     navesEnemigas.append(pygame.image.load(enemigo1))
-    enemigo2 = recursosPath('imagenes/enemy2.png')
+    enemigo2 = recursosPath('recursos/imagenes/enemy2.png')
     navesEnemigas.append(pygame.image.load(enemigo2))
     
     #se asigna lugar aleatorio de las naves enemigas ejes X y Y
@@ -107,7 +108,8 @@ for i in range(numEnemigos):
         
     #funcion para dibujar al jugador en la pantalla
     def player (x, y):
-        screen.blit(jugadorImagen,(x,y))
+        screen.blit(jugadorImagen, (x,y))
+        
     
     #funcion para dibujar naves enemigas en la pantalla
     def enemigos (x, y ,i):
@@ -145,7 +147,7 @@ for i in range(numEnemigos):
         global balaY
         global colision
         global balaEstado
-        
+           
         inGame = True
         while inGame:
             #maneja los eventos, actualiza,limpia la pantalla y renderiza el juego
@@ -214,7 +216,7 @@ for i in range(numEnemigos):
                 dispararBala (balaX, balaY)
                 balaY -= balaCambioEjeY
                 
-            player(posicionJugadorX,posicionJugadorY)
+            #player(posicionJugadorX,posicionJugadorY)
             mostrarPuntaje()
             pygame.display.update()
             
